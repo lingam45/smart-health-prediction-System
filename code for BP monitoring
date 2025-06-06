@@ -1,0 +1,66 @@
+# Required libraries for the app
+import tkinter as tk
+from tkinter import messagebox
+import matplotlib.pyplot as plt
+
+# Lists to store blood pressure data
+systolic_bp = []
+diastolic_bp = []
+timestamps = []
+
+# Function to add blood pressure data
+def add_data():
+systolic = entry_systolic.get()
+diastolic = entry_diastolic.get()
+
+if not systolic or not diastolic:
+messagebox.showerror("Error", "Please enter both Systolic and Diastolic values.")
+return
+
+try:
+systolic = int(systolic)
+diastolic = int(diastolic)
+except ValueError:
+messagebox.showerror("Error", "Systolic and Diastolic values should be integers.")
+return
+
+systolic_bp.append(systolic)
+diastolic_bp.append(diastolic)
+timestamps.append(str(pd.Timestamp.now().time()))
+
+entry_systolic.delete(0, tk.END)
+entry_diastolic.delete(0, tk.END)
+
+# Function to display the blood pressure chart
+def show_chart():
+plt.plot(timestamps, systolic_bp, label='Systolic')
+plt.plot(timestamps, diastolic_bp, label='Diastolic')
+plt.xlabel('Time')
+plt.ylabel('Blood Pressure')
+plt.title('Blood Pressure Monitoring')
+plt.legend()
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# GUI setup
+root = tk.Tk()
+root.title("Blood Pressure Monitoring App")
+
+label_systolic = tk.Label(root, text="Systolic:")
+label_systolic.pack()
+entry_systolic = tk.Entry(root)
+entry_systolic.pack()
+
+label_diastolic = tk.Label(root, text="Diastolic:")
+label_diastolic.pack()
+entry_diastolic = tk.Entry(root)
+entry_diastolic.pack()
+
+add_button = tk.Button(root, text="Add Data", command=add_data)
+add_button.pack()
+
+show_chart_button = tk.Button(root, text="Show Chart", command=show_chart)
+show_chart_button.pack()
+
+root.mainloop()
